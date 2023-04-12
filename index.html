@@ -1,0 +1,77 @@
+!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>URL Viewer</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        input[type="text"] {
+            width: 100%;
+            padding: 12px 20px;
+            margin: 8px 0;
+            box-sizing: border-box;
+            border: 2px solid #ccc;
+            border-radius: 4px;
+        }
+
+        button {
+            background-color: #4CAF50;
+            border: none;
+            color: white;
+            padding: 15px 32px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            margin: 4px 2px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <h1>URL Viewer</h1>
+    <input type="text" id="urlInput" placeholder="Enter the URL" />
+    <button id="fetchButton">Fetch URL</button>
+    <pre id="urlContent"></pre>
+
+    <script>
+        document.getElementById('fetchButton').addEventListener('click', async () => {
+            const url = document.getElementById('urlInput').value;
+            const contentElement = document.getElementById('urlContent');
+
+            try {
+                const response = await fetch(url, {
+                    method: 'GET',
+                    mode: 'cors',
+                    headers: {
+                        'Content-Type': 'text/plain'
+                    }
+                });
+
+                if (response.ok) {
+                    const content = await response.text();
+                    contentElement.textContent = content;
+                } else {
+                    contentElement.textContent = 'Error: Unable to fetch the URL';
+                }
+            } catch (error) {
+                contentElement.textContent = 'Error: Unable to fetch the URL';
+            }
+        });
+
+        document.getElementById('urlInput').addEventListener('keydown', (event) => {
+            if (event.key === 'Enter') {
+                event.preventDefault();
+                document.getElementById('fetchButton').click();
+            }
+        });
+    </script>
+</body>
+</html>
